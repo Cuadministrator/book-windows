@@ -1,0 +1,21 @@
+.user-info-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  .user-info-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    margin-top: 2rem;
+  }
+  
+  .user-info-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    margin-top: .1rem;
+  }
+}
