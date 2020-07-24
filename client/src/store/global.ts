@@ -6,7 +6,11 @@ export interface Global {
 
 const global = () => {
   const store = useLocalStore(() => ({
-    appVersion: '0.0.0'
+    appVersion: '0.0.0',
+    loginUser: null,
+    changeLoginUser (value) {
+      store.loginUser = value
+    }
   }))
   return store
 }

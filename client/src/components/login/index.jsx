@@ -1,29 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, forwardRef } from 'react'
 import Taro, { Component } from "@tarojs/taro"
 import { View, Text } from "@tarojs/components"
+import { inject } from 'mobx-react'
 import { AtButton } from 'taro-ui'
+
+// utils
+import { login } from '../../utils/func'
 
 // style
 import './index.scss'
 
-const Login = () => {
-  const [context, setContext] = useState({})
-  const getLogin = () => {
-    Taro.cloud
-      .callFunction({
+const Login = inject(store => store)(forwardRef((props, ref) => {
+  const getUserInfo = useCallback(
+    async (e) => {
+      const { target: { userInfo } } = e
+      const res = await Taro.cloud.callFunction({
         name: "login",
         data: {}
       })
-      .then(res => {
-        setContext(res.result)
-      })
-  }
+      if (res && res.result) {
+        const { userInfo: cloudUserInfo } = res.result
+        props.globalStore.changeLoginUser(userInfo)
+      }
+    },
+    [],
+  )
   return (
     <View className='login-box'>
-      <AtButton onClick={getLogin}>获取登录云函数</AtButton>
-      <Text style={{width: '100%', flexWrap: 'wrap'}}>context：{JSON.stringify(context)}</Text>
+      <AtButton
+        type='primary'
+        openType='getUserInfo'
+        onGetUserInfo={getUserInfo}
+      >登陆</AtButton>
     </View>
   )
-}
+}))
 
 export default Login
