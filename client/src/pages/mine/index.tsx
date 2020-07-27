@@ -1,7 +1,5 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import { View } from '@tarojs/components'
-import { inject, useObserver } from 'mobx-react'
-
 // components
 import Login from '../../components/login'
 import UserInfo from '../../components/userInfo'
@@ -15,8 +13,8 @@ interface IProps {
   globalStore: Global
 }
 
-const Index = inject(store => store)(forwardRef((props: IProps, ref) => {
-  return useObserver(() => (
+const Mine = forwardRef((props: IProps, ref) => {
+  return (
     <View className='page-mine'>
       {
         !props.globalStore.loginUser
@@ -24,7 +22,7 @@ const Index = inject(store => store)(forwardRef((props: IProps, ref) => {
           : <UserInfo globalStore={props.globalStore} />
       }
     </View>
-  ))
-}))
+  )
+})
 
-export default Index
+export default Mine

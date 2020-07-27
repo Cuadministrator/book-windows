@@ -5,13 +5,7 @@ cloud.init({
   traceUser: true
 })
 
-export interface LoginReturn {
-  openid: string;
-  appid: string;
-  unionid: string
-}
-
-exports.main = async (event: any): Promise<LoginReturn> => {
+exports.main = async (event) => {
   const wxContext = cloud.getWXContext()
 
   return {

@@ -6,6 +6,7 @@ export interface ILoginUser {
   name: string;
   role: number;
   _id: string;
+  subscribeNumber: number;
 }
 
 export interface Global {

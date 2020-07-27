@@ -15,7 +15,8 @@ export const dbRequestResponse = (res: any): RequestResponse => {
   if (data) {
     result.success = true
     result.data = data
-  } else if (errMsg) {
+  }
+  if (errMsg) {
     result.message = errMsg
   }
   return result
