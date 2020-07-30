@@ -85,8 +85,6 @@ const Book = forwardRef((props: IProps, ref) => {
             data: {
               // 客户姓名
               name,
-              // 预约项目
-              projectName: `${bookNumber}人`,
               // 联系方式
               phone,
               // 预约时间

@@ -16,7 +16,7 @@ export interface RecordDatum {
   createDt: Date
 }
 
-const MAX_BOOK_NUM = 20
+const MAX_BOOK_NUM = 15
 
 export const addBook = async (
   name: string,

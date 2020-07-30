@@ -13,7 +13,7 @@ export const bookDtEnum = range(10).map((item: number) => {
 })
 
 export const bookTimeEnum = [
-  {id: 1, name: '10:30-11:30', value: '10:30'},
+  {id: 1, name: '10:00-11:00', value: '10:00'},
   {id: 1, name: '14:00-15:00', value: '14:00'},
   {id: 1, name: '16:00-17:00', value: '16:00'},
 ]

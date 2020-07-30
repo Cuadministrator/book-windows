@@ -28,17 +28,16 @@ exports.main = async (event, context) => {
       page: '/pages/index/index?current=1',
       data: {
         // 结果
-        phrase18: { value: '预约成功' },
+        phrase18: { value: '处理中' },
         // 客户姓名
         name2: { value: name },
         // 预约项目
-        thing8: { value: projectName },
+        thing8: 'WELL金级办公室参观',
         // 联系方式
         phone_number23: { value: phone },
         // 预约时间
         date17: { value: createDt },
       },
-      miniprogramState: 'developer',
     })
   })
 
