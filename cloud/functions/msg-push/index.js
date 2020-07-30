@@ -11,8 +11,8 @@ exports.main = async (event, context) => {
   const db = cloud.database()
   const wxContext = cloud.getWXContext()
 
-  const { name, projectName, phone, createDt } = event
-  if (!(name && projectName && phone && createDt)) return false
+  const { name, phone, createDt } = event
+  if (!(name && phone && createDt)) return false
 
   let touser = [wxContext.OPENID]
   const adminRes = await db.collection('users').where({role: 1}).get()
@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
         // 客户姓名
         name2: { value: name },
         // 预约项目
-        thing8: 'WELL金级办公室参观',
+        thing8: { value: 'WELL金级办公室参观' },
         // 联系方式
         phone_number23: { value: phone },
         // 预约时间
