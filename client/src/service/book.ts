@@ -61,10 +61,27 @@ export const addBook = async (
 
 export const searchBook = async (params = {}, config?) => {
   const db = Taro.cloud.database()
-  const res = await db
-    .collection('record')
-    .where(params)
-    .get()
+  const MAX_LIMIT = 20
+  const countRes = await db.collection('record').where(params).count()
+  const total = countRes.total
+  // 计算分几次取
+  const batchTimes = Math.ceil(total / MAX_LIMIT)
+  let tasks: Promise<Taro.DB.Query.IQueryResult>[] = []
+  for (let i = 0; i< batchTimes; i++) {
+    tasks.push(
+      db
+        .collection('record')
+        .where(params)
+        .orderBy('createDt', 'desc')
+        .skip(i * MAX_LIMIT)
+        .limit(MAX_LIMIT)
+        .get()
+    )
+  }
+  const res = (await Promise.all(tasks)).reduce((acc, cur) => ({
+    data: acc.data.concat(cur.data),
+    errMsg: acc.errMsg
+  }))
   if (res && res.data && res.data.length > 0) {
     res.data.forEach((item, index) => {
       if (!(config && config.stopDefault)) {

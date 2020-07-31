@@ -56,7 +56,18 @@ const Login = inject(store => store)(forwardRef((props: IProps, ref) => {
         !!roleName && <Text className='user-info-title' >{roleName}</Text>
       }
       <Text className='user-info-text'>{name}</Text>
-      <AtButton className='user-info-msg-btn' type='primary' onClick={bookMsg}>订阅消息 (剩余{subscribeNumber}次)</AtButton>
+      {
+        props.globalStore.loginUser.role === 1 &&
+        <AtButton className='user-info-msg-btn' type='primary' onClick={bookMsg}>订阅消息 (剩余{subscribeNumber}次)</AtButton>
+      }
+      {
+        props.globalStore.loginUser.role === 1 &&
+        <View className='user-info-tips-view'>
+          <View className='user-info-tips-text'>Tips:</View>
+          <View className='user-info-tips-text'>1. 管理员用户如需接收用户预约成功消息推送，订阅消息剩余次数大于0次。</View>
+          <View className='user-info-tips-text'>2. 点击订阅消息后勾选后续默认选择当前选择后，可连续点击，添加订阅消息剩余次数。</View>
+        </View>
+      }
     </View>
   )
 }))

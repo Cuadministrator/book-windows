@@ -21,6 +21,7 @@ interface BookDtEnum {
 }
 
 interface IProps {
+  showMessage: (message: string, type: 'info' | 'success' | 'error' | 'warning') => void
 }
 
 const Book = forwardRef((props: IProps, ref) => {
@@ -78,7 +79,7 @@ const Book = forwardRef((props: IProps, ref) => {
         endDt,
       )
       if (res && res.success && res.data) {
-        showToast('预约成功')
+        props.showMessage('预约成功', 'success')
         Taro.cloud.callFunction(
           {
             name: 'msg-push',
@@ -94,7 +95,7 @@ const Book = forwardRef((props: IProps, ref) => {
         )
         resetData()
       } else {
-        showToast(res.message)
+        props.showMessage(res.message, 'error')
       }
     },
     [name, company, position, phone, email, bookDt, bookNumber],
@@ -134,6 +135,7 @@ const Book = forwardRef((props: IProps, ref) => {
         name='name'
         title='姓名'
         type='text'
+        maxlength={10}
         placeholder='请填写姓名'
         value={name}
         onChange={(value: string) => setName(value)}
@@ -158,6 +160,7 @@ const Book = forwardRef((props: IProps, ref) => {
         name='phone'
         title='电话'
         type='phone'
+        maxlength={17}
         placeholder='请填写电话'
         value={phone}
         onChange={(value: string) => setPhone(value)}

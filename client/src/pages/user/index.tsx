@@ -1,11 +1,9 @@
 import React, { useEffect, forwardRef, useState, useCallback, useImperativeHandle } from 'react'
-import { View, Text, BaseEventOrig } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import { View, Text, BaseEventOrig, ScrollView } from '@tarojs/components'
 import { inject, useObserver } from 'mobx-react'
 
 // component
-import { AtMessage } from 'taro-ui'
-import { AtList, AtListItem } from 'taro-ui'
+import { AtList, AtListItem, AtActivityIndicator } from 'taro-ui'
 
 import { ILoginUser } from '../../store/global'
 
@@ -19,6 +17,7 @@ interface IData extends ILoginUser {
 }
 
 interface IProps {
+  showMessage: (message: string, type: 'info' | 'success' | 'error' | 'warning') => void
 }
 
 const User = inject(store => store)(forwardRef((props: IProps, ref) => {
@@ -53,43 +52,42 @@ const User = inject(store => store)(forwardRef((props: IProps, ref) => {
         setData(current)
         typeMsg = 'success'
       }
-      Taro.atMessage({
-        message: res.message,
-        type: typeMsg,
-      })
+      props.showMessage(res.message, typeMsg)
     },
     [data, setData]
   )
-  useEffect(() => {
-    initData()
-  }, [initData])
+
+  useEffect(() => { initData() }, [initData])
+
+  if (!initEnd) return useObserver(() => (<View className='page-user'><AtActivityIndicator mode='center' content='加载中...' /></View>))
   return useObserver(() => (
-    <View className='page-record'>
-      <AtMessage />
+    <View className='page-user'>
       {
         !!initEnd && (
           !!(data && data.length > 0)
           ? (
-            <AtList>
-              {
-                data.map((item, index) => {
-                  return (
-                    <AtListItem
-                      key={index}
-                      thumb={item.avatarUrl}
-                      title={item.name}
-                      note={item.visible ? '管理员' : '普通用户'}
-                      isSwitch
-                      switchIsCheck={item.visible}
-                      onSwitchChange={(value: BaseEventOrig<any>) => onAtListItemPress(value, index)}
-                    />
-                  )
-                })
-              }
-            </AtList>
+            <ScrollView className='page-user-scroll' scrollY>
+              <AtList>
+                {
+                  data.map((item, index) => {
+                    return (
+                      <AtListItem
+                        key={index}
+                        thumb={item.avatarUrl}
+                        title={item.name}
+                        note={item.visible ? '管理员' : '普通用户'}
+                        isSwitch
+                        switchIsCheck={item.visible}
+                        onSwitchChange={(value: BaseEventOrig<any>) => onAtListItemPress(value, index)}
+                      />
+                    )
+                  })
+                }
+              </AtList>
+            </ScrollView>
           )
           : (
-            <View className='no-record-box'>
+            <View className='no-user-box'>
               <Text className='no-record-text'>暂无用户</Text>
             </View>
           )

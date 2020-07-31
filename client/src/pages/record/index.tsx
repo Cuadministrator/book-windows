@@ -2,7 +2,7 @@ import React, { useEffect, forwardRef, useState, useCallback, useImperativeHandl
 import { View, ScrollView, Text } from '@tarojs/components'
 import dayjs from 'dayjs'
 
-import { AtAccordion, AtList, AtListItem } from 'taro-ui'
+import { AtAccordion, AtList, AtListItem, AtActivityIndicator } from 'taro-ui'
 
 // service
 import { getBookRecord, RecordDatum } from '../../service/book'
@@ -23,10 +23,10 @@ const Record = forwardRef((props: IProps, ref) => {
     async () => {
       setInitEnd(false)
       const brRes = await getBookRecord()
+      setInitEnd(true)
       if (brRes && brRes.success && brRes.data) {
         setData(brRes.data.map(item => ({...item, visible: false})) || [])
       }
-      setInitEnd(true)
     }, []
   )
 
@@ -44,73 +44,78 @@ const Record = forwardRef((props: IProps, ref) => {
     },
     [data, setData]
   )
+
   useEffect(() => {
     initData()
   }, [initData])
+
+  if (!initEnd) return <View className='page-record'><AtActivityIndicator mode='center' content='加载中...' /></View>
   return (
-    <ScrollView className='page-record' scrollY>
-      {
-        !!initEnd && (
-          !!(data && data.length > 0)
-            ? data.map((item, index) => {
-            return (
-              <AtAccordion
-                key={index}
-                open={item.visible}
-                onClick={(value: boolean) => onAccordionPress(index, value)}
-                title={item.name}
-              >
-                <AtList hasBorder={false}>
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS2nRP.png'
-                    note='姓名'
-                    title={item.name}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS2QsS.png'
-                    note='公司'
-                    title={item.company}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS2uxf.png'
-                    note='电话'
-                    title={item.phone}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS23ZQ.png'
-                    note='职位'
-                    title={item.position}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS2MM8.png'
-                    note='邮箱'
-                    title={item.email}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS2lqg.png'
-                    note='预约人数'
-                    title={`${item.bookNumber}个`}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS28aj.png'
-                    note='预约时间'
-                    title={`${dayjs(item.bookStartDt).format('YYYY-MM-DD HH:mm:ss')} - ${dayjs(item.bookEndDt).format('HH:mm:ss')}`}
-                  />
-                  <AtListItem
-                    thumb='https://s1.ax1x.com/2020/07/25/aS28aj.png'
-                    note='创建时间'
-                    title={`${dayjs(item.createDt).format('YYYY-MM-DD HH:mm:ss')}`}
-                  />
-                </AtList>
-              </AtAccordion>
-            )
-          })
-          : <View className='no-record-box'>
-            <Text className='no-record-text'>暂无预约记录</Text>
-          </View>
-        )
-      }
-    </ScrollView>
+    <View className='page-record'>
+      <ScrollView className='page-record-scroll' scrollY>
+        {
+          !!initEnd && (
+            !!(data && data.length > 0)
+              ? data.map((item, index) => {
+              return (
+                <AtAccordion
+                  key={index}
+                  open={item.visible}
+                  onClick={(value: boolean) => onAccordionPress(index, value)}
+                  title={item.name}
+                >
+                  <AtList hasBorder={false}>
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS2nRP.png'
+                      note='姓名'
+                      title={item.name}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS2QsS.png'
+                      note='公司'
+                      title={item.company}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS2uxf.png'
+                      note='电话'
+                      title={item.phone}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS23ZQ.png'
+                      note='职位'
+                      title={item.position}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS2MM8.png'
+                      note='邮箱'
+                      title={item.email}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS2lqg.png'
+                      note='预约人数'
+                      title={`${item.bookNumber}个`}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS28aj.png'
+                      note='预约时间'
+                      title={`${dayjs(item.bookStartDt).format('YYYY-MM-DD HH:mm:ss')} - ${dayjs(item.bookEndDt).format('HH:mm:ss')}`}
+                    />
+                    <AtListItem
+                      thumb='https://s1.ax1x.com/2020/07/25/aS28aj.png'
+                      note='创建时间'
+                      title={`${dayjs(item.createDt).format('YYYY-MM-DD HH:mm:ss')}`}
+                    />
+                  </AtList>
+                </AtAccordion>
+              )
+            })
+            : <View className='no-record-box'>
+              <Text className='no-record-text'>暂无预约记录</Text>
+            </View>
+          )
+        }
+      </ScrollView>
+    </View>
   )
 })
 

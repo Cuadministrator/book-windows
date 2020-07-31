@@ -1,4 +1,5 @@
 import React, { useRef, forwardRef, useEffect, useState, useCallback } from 'react'
+import Taro from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import { inject, useObserver, observer } from 'mobx-react'
 import {
@@ -9,6 +10,7 @@ import {
   AtModalHeader,
   AtModalContent,
   AtModalAction,
+  AtMessage,
 } from 'taro-ui'
 
 // components
@@ -80,6 +82,16 @@ const Index = inject('globalStore')(observer(forwardRef((props: IProps, ref) => 
     [recordRef, tabList, userRef],
   )
 
+  const showMessage = useCallback(
+    (message: '正在加载中', type: 'info') => {
+      Taro.atMessage({
+        message: message,
+        type: type,
+      })
+    },
+    []
+  )
+
   if (!initEnd) return useObserver(() => null)
 
   return useObserver(() => (
@@ -95,7 +107,7 @@ const Index = inject('globalStore')(observer(forwardRef((props: IProps, ref) => 
             if (item.id === 'book') {
               return (
                 <AtTabsPane className='at-tab-pan' current={current} index={index} >
-                  <Book ref={bookRef} />
+                  <Book ref={bookRef} showMessage={showMessage} />
                 </AtTabsPane>
               )
             } else if (item.id === 'record') {
@@ -107,7 +119,7 @@ const Index = inject('globalStore')(observer(forwardRef((props: IProps, ref) => 
             } else if (item.id === 'user') {
               return (
                 <AtTabsPane className='at-tab-pan' current={current} index={index}>
-                  <User ref={userRef} />
+                  <User ref={userRef} showMessage={showMessage} />
                 </AtTabsPane>
               )
             } else if (item.id === 'mine') {
@@ -154,6 +166,7 @@ const Index = inject('globalStore')(observer(forwardRef((props: IProps, ref) => 
           >进入预约</Button>
         </AtModalAction>
       </AtModal>
+      <AtMessage />
     </View>
   ))
 })))

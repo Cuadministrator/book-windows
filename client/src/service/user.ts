@@ -53,10 +53,28 @@ export const addUser = async (name, role, avatarUrl?) => {
 
 export const searchUser = async (params = {}, config?) => {
   const db = Taro.cloud.database()
-  const res = await db
-    .collection('users')
-    .where(params)
-    .get()
+  const MAX_LIMIT = 20
+  const countRes = await db.collection('users').where(params).count()
+  const total = countRes.total
+  // 计算分几次取
+  const batchTimes = Math.ceil(total / MAX_LIMIT)
+  let tasks: Promise<Taro.DB.Query.IQueryResult>[] = []
+  for (let i = 0; i< batchTimes; i++) {
+    tasks.push(
+      db
+        .collection('users')
+        .where(params)
+        .orderBy('role', 'asc')
+        .orderBy('createDt', 'asc')
+        .skip(i * MAX_LIMIT)
+        .limit(MAX_LIMIT)
+        .get()
+    )
+  }
+  const res = (await Promise.all(tasks)).reduce((acc, cur) => ({
+    data: acc.data.concat(cur.data),
+    errMsg: acc.errMsg
+  }))
   if (res && res.data && res.data.length > 0) {
     res.data.forEach((item, index) => {
       if (!(config && config.stopDefault)) {
