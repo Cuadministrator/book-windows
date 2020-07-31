@@ -56,6 +56,7 @@ export const searchUser = async (params = {}, config?) => {
   const MAX_LIMIT = 20
   const countRes = await db.collection('users').where(params).count()
   const total = countRes.total
+  if (total === 0) return dbRequestResponse({data: [], errMsg: '无有效用户'})
   // 计算分几次取
   const batchTimes = Math.ceil(total / MAX_LIMIT)
   let tasks: Promise<Taro.DB.Query.IQueryResult>[] = []
@@ -71,7 +72,8 @@ export const searchUser = async (params = {}, config?) => {
         .get()
     )
   }
-  const res = (await Promise.all(tasks)).reduce((acc, cur) => ({
+  const promises = (await Promise.all(tasks))
+  const res = promises.reduce((acc, cur) => ({
     data: acc.data.concat(cur.data),
     errMsg: acc.errMsg
   }))
