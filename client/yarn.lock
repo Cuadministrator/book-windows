@@ -9470,10 +9470,10 @@ tar@^6.0.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-taro-ui@^3.0.0-alpha.2:
-  version "3.0.0-alpha.2"
-  resolved "https://registry.npm.taobao.org/taro-ui/download/taro-ui-3.0.0-alpha.2.tgz#f45f3b4efed105381d69084bebd6a05f0a58487f"
-  integrity sha1-9F87Tv7RBTgdaQhL69agXwpYSH8=
+taro-ui@^3.0.0-alpha.3:
+  version "3.0.0-alpha.10"
+  resolved "https://registry.npm.taobao.org/taro-ui/download/taro-ui-3.0.0-alpha.10.tgz?cache=0&sync_timestamp=1612242308480&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftaro-ui%2Fdownload%2Ftaro-ui-3.0.0-alpha.10.tgz#c6fb95ddb70d31c5b1e242cdc25fb11d630339a2"
+  integrity sha1-xvuV3bcNMcWx4kLNwl+xHWMDOaI=
   dependencies:
     classnames "^2.2.6"
     dayjs "^1.7.7"
